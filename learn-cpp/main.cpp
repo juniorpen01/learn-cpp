@@ -1,22 +1,28 @@
-#include<iostream>
-#include<tuple>
+#include<print>
 
-template<typename...Args>
-auto add(Args... args) {
-	return (args + ...);
+void foo(int& x) {
+	std::println(stderr, "foo(int& x) {}", x);
+}
+void foo(int&& x) {
+	std::println(stderr, "foo(int&& x) {}", x);
+
 }
 
-template<typename...Args>
-void print(Args... args) {
-	(std::cout << ... << args);
+template<typename T>
+void foo_wrapper(T&& x) {
+	std::println(stderr, "foo_wrapper(T&& x)");
+	foo(std::forward<T>(x));
 }
 
 int main() {
-	std::cout << "Hello world\n";
-	auto foo{ std::make_unique<int>(2) };
-	add(1, 2, 3);
-	add(3.0);
-	std::tuple<int, int> bar{ 1,2 };
-	print(1, 2,"foo");
-}
+	std::println("hideous");
 
+	int i{};
+
+	foo(i);
+	foo(std::move(i));
+
+	foo_wrapper(i);
+	foo_wrapper(std::move(i));
+	foo_wrapper(1);
+}
